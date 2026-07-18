@@ -1,10 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: home-library
-  namespace: colossus-home-library
+  name: home-library-staging
+  namespace: colossus-home-library-staging
   labels:
-    app: home-library
+    app: home-library-staging
     managed-by: colossus
 spec:
   replicas: 1
@@ -12,11 +12,11 @@ spec:
     type: Recreate
   selector:
     matchLabels:
-      app: home-library
+      app: home-library-staging
   template:
     metadata:
       labels:
-        app: home-library
+        app: home-library-staging
     spec:
       hostAliases:
         - ip: "192.168.50.250"
@@ -24,8 +24,16 @@ spec:
             - "ubuntu.desmana-truck.ts.net"
       containers:
         - name: app
-          image: ubuntu:30500/home-library:latest
+          image: ubuntu:30500/home-library-staging:latest
           imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 5
           envFrom:
             - secretRef:
                 name: app-secrets

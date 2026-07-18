@@ -1,12 +1,12 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: colossus-home-library
+namespace: colossus-home-library-staging
 resources:
   - k8s/deployment.yaml
   - k8s/service.yaml
   - k8s/ingress.yaml
 images:
-  - name: ubuntu:30500/home-library
-    digest: sha256:651723b7f749d1a27afffcfd0f49e96d92d76cc30dfb5998261ac4193687186e
+  - name: ubuntu:30500/home-library-staging
+    digest: sha256:cade8c27ec1b4eea2c361a1444166a7d96618b224559fb3415125d93b9238773
 # Redeploy:  kubectl apply -k . (re-applies this exact image)
 # Rebuild:   re-trigger the deploy pipeline for branch main in Colossus

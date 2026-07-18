@@ -1,10 +1,10 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: home-library
-  namespace: colossus-home-library
+  name: home-library-staging
+  namespace: colossus-home-library-staging
   labels:
-    app: home-library
+    app: home-library-staging
     managed-by: colossus
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
@@ -15,11 +15,11 @@ spec:
     - host: ubuntu.desmana-truck.ts.net
       http:
         paths:
-          - path: /home-library(/|$)(.*)
+          - path: /home-library-staging(/|$)(.*)
             pathType: ImplementationSpecific
             backend:
               service:
-                name: home-library
+                name: home-library-staging
                 port:
                   number: 80
   tls:
