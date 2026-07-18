@@ -62,8 +62,14 @@ router.post('/', async (req: AuthRequest, res) => {
 router.post('/:id/return', async (req: AuthRequest, res) => {
   const id = Number(req.params.id);
   if (!Number.isInteger(id)) return res.status(400).json({ error: 'invalid id' });
-  const loan = await prisma.loan.findFirst({ where: { id, ...scopeWhere(req) } });
+  const loan = await prisma.loan.findFirst({
+    where: { id, ...scopeWhere(req) },
+    include: { book: { select: { title: true } } },
+  });
   if (!loan) return res.status(404).json({ error: 'loan not found' });
+  // Idempotent no-op: an already-returned loan is returned as-is (200) without
+  // touching returnedAt, matching the contract in .pipeline/test_spec.md.
+  if (loan.status === 'returned') return res.json(serializeLoan(loan));
   const updated = await prisma.loan.update({
     where: { id },
     data: { status: 'returned', returnedAt: new Date() },

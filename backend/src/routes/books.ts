@@ -8,18 +8,27 @@ const router = Router();
 // All book routes require an authenticated user.
 router.use(authMiddleware);
 
+// Accepts a string or an omitted value; any other type (number, boolean,
+// object, array, null) is rejected rather than String()-coerced.
+function readField(value: unknown): string | null {
+  if (value === undefined) return '';
+  if (typeof value !== 'string') return null;
+  return value.trim();
+}
+
 function readBookInput(body: unknown) {
   const b = (body ?? {}) as Record<string, unknown>;
-  const title = String(b.title ?? '').trim();
-  const author = String(b.author ?? '').trim();
+  const title = readField(b.title);
+  const author = readField(b.author);
+  const genre = readField(b.genre);
+  const isbn = readField(b.isbn);
+  const shelfLocation = readField(b.shelf_location);
+  // A null means a non-string value was supplied → invalid input.
+  if (title === null || author === null || genre === null || isbn === null || shelfLocation === null) {
+    return null;
+  }
   if (!title || !author) return null;
-  return {
-    title,
-    author,
-    genre: String(b.genre ?? '').trim(),
-    isbn: String(b.isbn ?? '').trim(),
-    shelfLocation: String(b.shelf_location ?? '').trim(),
-  };
+  return { title, author, genre, isbn, shelfLocation };
 }
 
 // GET /api/books — shared household catalog.

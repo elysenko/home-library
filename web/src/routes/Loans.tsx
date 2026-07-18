@@ -1,14 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import {
-  mockApi,
+  ledgerApi,
   deriveStatus,
   isOverdue,
   TODAY,
   type Book,
   type Loan,
   type LoanFilter,
-} from '../mock/store';
+} from '../lib/store';
 import { useAuth } from '../auth/AuthContext';
 import { EmptyState, ErrorState, LoadingState, Modal, StatusBadge, Toast } from '../components/ui';
 
@@ -51,10 +51,10 @@ export default function Loans() {
     if (!user) return;
     setStatus('loading');
     try {
-      const rows = await mockApi.listLoans(filter);
+      const rows = await ledgerApi.listLoans(filter);
       setLoans(rows);
       // counts across the user's full scope (not the current filter)
-      const scope = await mockApi.listLoans('all');
+      const scope = await ledgerApi.listLoans('all');
       setCounts({
         all: scope.length,
         lent: scope.filter((l) => deriveStatus(l) === 'lent').length,
@@ -73,13 +73,13 @@ export default function Loans() {
   }, [filter, user]);
 
   useEffect(() => {
-    mockApi.listBooks().then(setBooks).catch(() => setBooks([]));
+    ledgerApi.listBooks().then(setBooks).catch(() => setBooks([]));
   }, []);
 
   async function handleReturn(loan: Loan) {
     setReturning(loan.id);
     try {
-      await mockApi.returnLoan(loan.id);
+      await ledgerApi.returnLoan(loan.id);
       flash(`“${loan.book_title}” marked returned`);
       await load();
     } finally {
@@ -192,7 +192,7 @@ export default function Loans() {
               if (!user) return;
               setSaving(true);
               try {
-                await mockApi.createLoan({ ...input, user_id: user.id });
+                await ledgerApi.createLoan({ ...input, user_id: user.id });
                 setShowForm(false);
                 flash('Loan logged');
                 await load();

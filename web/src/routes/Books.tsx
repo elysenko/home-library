@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { mockApi, coverFor, type Book } from '../mock/store';
+import { ledgerApi, coverFor, type Book } from '../lib/store';
 import { EmptyState, ErrorState, LoadingState, Modal, Toast } from '../components/ui';
 import BookForm, { type BookInput } from '../components/BookForm';
 
@@ -21,7 +21,7 @@ export default function Books() {
   async function load() {
     setStatus('loading');
     try {
-      setBooks(await mockApi.listBooks());
+      setBooks(await ledgerApi.listBooks());
       setStatus('ready');
     } catch {
       setStatus('error');
@@ -47,10 +47,10 @@ export default function Books() {
     setSaving(true);
     try {
       if (modal?.mode === 'edit') {
-        await mockApi.updateBook(modal.book.id, input);
+        await ledgerApi.updateBook(modal.book.id, input);
         flash('Book updated');
       } else {
-        await mockApi.createBook(input);
+        await ledgerApi.createBook(input);
         flash('Book added to the catalog');
       }
       setModal(null);
@@ -64,7 +64,7 @@ export default function Books() {
     if (!confirmDelete) return;
     setSaving(true);
     try {
-      await mockApi.deleteBook(confirmDelete.id);
+      await ledgerApi.deleteBook(confirmDelete.id);
       flash('Book removed');
       setConfirmDelete(null);
       await load();

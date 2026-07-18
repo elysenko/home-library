@@ -11,7 +11,11 @@ router.post('/login', async (req, res) => {
   if (!email || !password) {
     return res.status(400).json({ error: 'email and password required' });
   }
-  const user = await prisma.user.findUnique({ where: { email: String(email) } });
+  const emailStr = String(email);
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailStr)) {
+    return res.status(400).json({ error: 'invalid email format' });
+  }
+  const user = await prisma.user.findUnique({ where: { email: emailStr } });
   if (!user || !verifyPassword(String(password), user.password)) {
     return res.status(401).json({ error: 'invalid credentials' });
   }

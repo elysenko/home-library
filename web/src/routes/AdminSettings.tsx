@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { settings as seedSettings, type ServiceSetting } from '../mock/store';
+import { settings as seedSettings, type ServiceSetting } from '../lib/store';
 import { Toast } from '../components/ui';
 
 export default function AdminSettings() {

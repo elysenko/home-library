@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { Book } from '../mock/store';
+import type { Book } from '../lib/store';
 
 export type BookInput = Omit<Book, 'id' | 'created_at'>;
 

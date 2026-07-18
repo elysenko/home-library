@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { mockApi, type User, type Loan } from '../mock/store';
+import { ledgerApi, type User, type Loan } from '../lib/store';
 import { ErrorState, LoadingState, RoleBadge } from '../components/ui';
 
 export default function Admin() {
@@ -11,7 +11,7 @@ export default function Admin() {
   async function load() {
     setStatus('loading');
     try {
-      const [u, l] = await Promise.all([mockApi.listUsers(), mockApi.listLoans('all')]);
+      const [u, l] = await Promise.all([ledgerApi.listUsers(), ledgerApi.listLoans('all')]);
       setUsers(u);
       setAllLoans(l);
       setStatus('ready');

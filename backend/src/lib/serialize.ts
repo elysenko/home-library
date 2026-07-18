@@ -1,5 +1,5 @@
 // Serializers: map Prisma rows to the snake_case, integer-id shapes the
-// approved frontend (web/src/mock/store.ts types) expects. Dates are emitted
+// approved frontend (web/src/lib/store.ts types) expects. Dates are emitted
 // as `YYYY-MM-DD` so the client's lexicographic overdue comparison holds.
 import type { User, Book, Loan } from '@prisma/client';
 

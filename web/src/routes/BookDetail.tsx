@@ -1,13 +1,19 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import { mockApi, coverFor, deriveStatus, type Book, type Loan } from '../mock/store';
+import { ledgerApi, coverFor, deriveStatus, type Book, type Loan } from '../lib/store';
 import { EmptyState, ErrorState, LoadingState, Modal, StatusBadge, Toast } from '../components/ui';
 import BookForm, { type BookInput } from '../components/BookForm';
+import { useAuth } from '../auth/AuthContext';
 
 export default function BookDetail() {
   const { id } = useParams<{ id: string }>();
   const bookId = Number(id);
   const navigate = useNavigate();
+  const { user } = useAuth();
+  // The loans list is role-scoped server-side: ADMIN sees every household loan
+  // for this book, a USER sees only the loans they logged. Label accordingly so
+  // an empty section is never read as "this book was never lent by anyone".
+  const isAdmin = user?.role === 'ADMIN';
 
   const [book, setBook] = useState<Book | null>(null);
   const [status, setStatus] = useState<'loading' | 'ready' | 'notfound' | 'error'>('loading');
@@ -20,13 +26,13 @@ export default function BookDetail() {
   async function load() {
     setStatus('loading');
     try {
-      const b = await mockApi.getBook(bookId);
+      const b = await ledgerApi.getBook(bookId);
       if (!b) {
         setStatus('notfound');
         return;
       }
       setBook(b);
-      const loans = await mockApi.listLoans('all');
+      const loans = await ledgerApi.listLoans('all');
       setHistory(loans.filter((l) => l.book_id === b.id));
       setStatus('ready');
     } catch {
@@ -42,7 +48,7 @@ export default function BookDetail() {
   async function handleEdit(input: BookInput) {
     setSaving(true);
     try {
-      await mockApi.updateBook(bookId, input);
+      await ledgerApi.updateBook(bookId, input);
       setEditing(false);
       setToast('Book updated');
       window.setTimeout(() => setToast(''), 2400);
@@ -55,7 +61,7 @@ export default function BookDetail() {
   async function handleDelete() {
     setSaving(true);
     try {
-      await mockApi.deleteBook(bookId);
+      await ledgerApi.deleteBook(bookId);
       navigate('/books');
     } finally {
       setSaving(false);
@@ -133,10 +139,22 @@ export default function BookDetail() {
 
           <hr className="divider" />
 
-          <h2 className="section-title">Loan history</h2>
-          <p className="section-sub">Every time this title has been lent out.</p>
+          <h2 className="section-title">{isAdmin ? 'Loan history' : 'Your loan history for this book'}</h2>
+          <p className="section-sub">
+            {isAdmin
+              ? 'Every time this title has been lent out.'
+              : 'Loans you logged for this title. Other members’ loans are private.'}
+          </p>
           {history.length === 0 ? (
-            <EmptyState icon="🔖" title="Never been lent" message="This book hasn't been loaned out yet." />
+            <EmptyState
+              icon="🔖"
+              title={isAdmin ? 'Never been lent' : 'No loans from you yet'}
+              message={
+                isAdmin
+                  ? "This book hasn't been loaned out yet."
+                  : "You haven't logged a loan for this book yet."
+              }
+            />
           ) : (
             <div className="card table-wrap">
               <table className="table">

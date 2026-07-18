@@ -1,6 +1,6 @@
 {
   "_generated": true,
-  "_note": "Extended by the coder agent to reflect the implemented routes/components/testids.",
+  "_note": "Extended by the coder agent to reflect the full implemented routes/components/testids (see .pipeline/approved_landmarks.json for the target testid list).",
   "routes": [
     { "method": "GET", "path": "/api/health" },
     { "method": "POST", "path": "/api/auth/login" },
@@ -23,25 +23,48 @@
     { "selector": "Loans", "file": "web/src/routes/Loans.tsx" },
     { "selector": "Admin", "file": "web/src/routes/Admin.tsx" },
     { "selector": "AdminSettings", "file": "web/src/routes/AdminSettings.tsx" },
-    { "selector": "Layout", "file": "web/src/components/Layout.tsx" }
+    { "selector": "Layout", "file": "web/src/components/Layout.tsx" },
+    { "selector": "BookForm", "file": "web/src/components/BookForm.tsx" },
+    { "selector": "Ui", "file": "web/src/components/ui.tsx" }
   ],
   "testIds": [
     { "id": "app-ready", "element": "div", "component": "App" },
+    { "id": "app-shell", "element": "div", "component": "Layout" },
+    { "id": "auth-loading", "element": "div", "component": "App" },
+    { "id": "logout", "element": "button", "component": "Layout" },
     { "id": "login-page", "element": "div", "component": "Login" },
     { "id": "login-form", "element": "form", "component": "Login" },
     { "id": "login-email", "element": "input", "component": "Login" },
     { "id": "login-password", "element": "input", "component": "Login" },
     { "id": "login-submit", "element": "button", "component": "Login" },
+    { "id": "login-error", "element": "div", "component": "Login" },
     { "id": "books-page", "element": "main", "component": "Books" },
     { "id": "books-title", "element": "h1", "component": "Books" },
+    { "id": "books-search", "element": "input", "component": "Books" },
     { "id": "add-book", "element": "button", "component": "Books" },
     { "id": "books-grid", "element": "div", "component": "Books" },
+    { "id": "confirm-delete", "element": "button", "component": "Books" },
     { "id": "book-detail-page", "element": "main", "component": "BookDetail" },
+    { "id": "book-detail-title", "element": "h1", "component": "BookDetail" },
+    { "id": "edit-book", "element": "button", "component": "BookDetail" },
+    { "id": "book-form", "element": "form", "component": "BookForm" },
+    { "id": "book-form-submit", "element": "button", "component": "BookForm" },
     { "id": "loans-page", "element": "main", "component": "Loans" },
+    { "id": "loans-title", "element": "h1", "component": "Loans" },
     { "id": "loans-list", "element": "div", "component": "Loans" },
+    { "id": "loan-row", "element": "article", "component": "Loans" },
     { "id": "log-loan", "element": "button", "component": "Loans" },
+    { "id": "loan-form", "element": "form", "component": "Loans" },
+    { "id": "loan-form-submit", "element": "button", "component": "Loans" },
     { "id": "admin-page", "element": "main", "component": "Admin" },
+    { "id": "admin-title", "element": "h1", "component": "Admin" },
     { "id": "users-table", "element": "div", "component": "Admin" },
-    { "id": "logout", "element": "button", "component": "Layout" }
+    { "id": "user-row", "element": "tr", "component": "Admin" },
+    { "id": "admin-settings-page", "element": "main", "component": "AdminSettings" },
+    { "id": "admin-settings-title", "element": "h1", "component": "AdminSettings" },
+    { "id": "empty-state", "element": "div", "component": "Ui" },
+    { "id": "error-state", "element": "div", "component": "Ui" },
+    { "id": "loading-state", "element": "div", "component": "Ui" },
+    { "id": "toast", "element": "div", "component": "Ui" }
   ]
 }

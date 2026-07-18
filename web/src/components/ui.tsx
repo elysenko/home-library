@@ -1,5 +1,5 @@
 import { useEffect, type ReactNode } from 'react';
-import { deriveStatus, type Loan } from '../mock/store';
+import { deriveStatus, type Loan } from '../lib/store';
 
 // ---- Status badge -------------------------------------------
 export function StatusBadge({ loan }: { loan: Loan }) {

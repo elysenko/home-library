@@ -1,13 +1,12 @@
 // ============================================================
 // Data layer for the Lending Ledger UI.
 //
-// Originally in-memory fixtures for the static mockup; now a thin
-// client over the live Express + Prisma API (same-origin /api/*,
-// proxied by nginx in prod and by vite in dev). The exported shapes
-// and the `mockApi` surface are unchanged so the approved UI wires
-// in without touching component markup.
+// A thin client over the live Express + Prisma API (same-origin
+// /api/*, proxied by nginx in prod and by vite in dev). Every method
+// below performs a real HTTP request via `api()` — there are no
+// fixtures, no simulated latency, and no in-memory collections.
 // ============================================================
-import { api } from '../lib/api';
+import { api } from './api';
 
 export type Role = 'ADMIN' | 'USER';
 export type LoanStatus = 'lent' | 'returned';
@@ -113,11 +112,12 @@ export const settings: ServiceSetting[] = [
 
 // ---- live API client ----------------------------------------
 // Role scoping (USER sees own loans, ADMIN sees all) is enforced server-side
-// from the JWT; `filter` is applied client-side so list + counts stay consistent.
+// from the JWT; the status `filter` is applied server-side via `?status=` so
+// overdue derivation uses the server clock (UTC).
 
 export type BookInput = Omit<Book, 'id' | 'created_at'>;
 
-export const mockApi = {
+export const ledgerApi = {
   async login(email: string, password: string): Promise<{ token: string; user: User }> {
     return api<{ token: string; user: User }>('/api/auth/login', {
       method: 'POST',
@@ -154,9 +154,9 @@ export const mockApi = {
   },
 
   async listLoans(filter: LoanFilter = 'all'): Promise<Loan[]> {
-    const rows = await api<Loan[]>('/api/loans');
-    const scoped = filter === 'all' ? rows : rows.filter((l) => deriveStatus(l) === filter);
-    return [...scoped].sort((a, b) => a.due_date.localeCompare(b.due_date));
+    const qs = filter === 'all' ? '' : `?status=${encodeURIComponent(filter)}`;
+    const rows = await api<Loan[]>(`/api/loans${qs}`);
+    return [...rows].sort((a, b) => a.due_date.localeCompare(b.due_date));
   },
 
   async createLoan(input: {

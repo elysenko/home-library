@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
-import { mockApi, type User } from '../mock/store';
+import { ledgerApi, type User } from '../lib/store';
 
 interface AuthState {
   user: User | null;
@@ -22,7 +22,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setLoading(false);
       return;
     }
-    mockApi
+    ledgerApi
       .me()
       .then((u) => setUser(u))
       .catch(() => localStorage.removeItem('token'))
@@ -30,7 +30,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   async function login(email: string, password: string) {
-    const { token, user } = await mockApi.login(email, password);
+    const { token, user } = await ledgerApi.login(email, password);
     localStorage.setItem('token', token);
     setUser(user);
   }
