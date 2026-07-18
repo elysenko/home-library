@@ -1,0 +1,107 @@
+{
+  "certified": false,
+  "components": {
+    "backend": {
+      "backend_probe_path": "/api/health",
+      "commands": {
+        "test": "npm test -- --maxWorkers=2",
+        "typecheck": "npx tsc --noEmit"
+      },
+      "display_name": "Express 4 (TypeScript)",
+      "fingerprint_files": [
+        "src/app.ts",
+        "src/server.ts"
+      ],
+      "id": "express",
+      "kind": "backend",
+      "npm_scripts_contract": [
+        "build",
+        "start:prod"
+      ],
+      "prompt_fragment": "stacks/react-express/backend_agent.md",
+      "root_candidates": [
+        "backend"
+      ],
+      "schema_version": 1,
+      "test_tuning": {
+        "jest_max_workers": 2,
+        "ts_jest_isolated_modules": true
+      }
+    },
+    "frontend": {
+      "browser_verify": {
+        "notes": "Pure React SPA: no Angular testability API. Wait = domcontentloaded + fixed settle + optional selector wait; react-router BrowserRouter path-routed (nginx try_files), so route probes must use real paths or in-app nav.",
+        "wait_strategy": "network_settle"
+      },
+      "commands": {
+        "build": "npx vite build",
+        "serve_dev": "npx vite"
+      },
+      "display_name": "React 18 + Vite (SPA)",
+      "fingerprint_files": [
+        "vite.config.ts",
+        "vite.config.js",
+        "vite.config.mjs"
+      ],
+      "fullstack_capable": false,
+      "id": "react-vite",
+      "kind": "frontend",
+      "prompt_fragment": "stacks/react-express/ui_agent.md",
+      "root_candidates": [
+        "web",
+        "frontend",
+        "."
+      ],
+      "schema_version": 1,
+      "test_tuning": {
+        "jest_max_workers": 2
+      }
+    },
+    "orm": {
+      "codegen_before_typecheck": [
+        "npx prisma generate"
+      ],
+      "display_name": "Prisma",
+      "id": "prisma",
+      "kind": "orm",
+      "migrate_deploy": "npx prisma migrate deploy",
+      "prompt_fragment": "stacks/enterprise/db_agent.md",
+      "schema_file_candidates": [
+        "prisma/schema.prisma",
+        "backend/prisma/schema.prisma"
+      ],
+      "schema_version": 1,
+      "seed_path_candidates": [
+        "prisma/seed/seed.js",
+        "prisma/seed.js",
+        "backend/prisma/seed/seed.js",
+        "backend/prisma/seed.js"
+      ]
+    }
+  },
+  "display_name": "React + Express (Vite SPA + Express API + Prisma)",
+  "docker_targets": [
+    {
+      "context": "backend",
+      "dockerfile": "Dockerfile",
+      "label": "backend"
+    },
+    {
+      "context": "web",
+      "dockerfile": "Dockerfile.frontend",
+      "label": "frontend"
+    }
+  ],
+  "glue": {
+    "api_client": "fetch",
+    "auth_pattern": "jwt_session",
+    "frontend_api_base": "/api"
+  },
+  "known_good_dockerfiles": false,
+  "notes": "Classic decoupled two-service JS stack: nginx-served Vite SPA (web/, proxies /api -> backend:3000) + Express API (backend/, PORT=3000, npm scripts build + start:prod, prisma migrate at boot). Mirrors the enterprise web/+backend/ layout so deploy_debug_app's multi-service saga is reused wholesale. known_good_dockerfiles=false: the known-good frontend Dockerfile is Angular-hardcoded (ng build) \u2014 the template ships its own real-build per-service Dockerfiles (nextjs-cert precedent). Seed MUST emit SEED_CREDS_JSON; deep-link routes required (route-verifiability); nginx conf needs try_files for react-router.",
+  "resolved_schema_version": 1,
+  "schema_version": 1,
+  "serve_topology": "nginx_spa_plus_backend_service",
+  "stack_id": "react-express",
+  "template_dir": "template-react-express"
+}
