@@ -14,4 +14,4 @@ ENV NODE_ENV=production
 ENV PORT=3000
 COPY --from=build /app ./
 EXPOSE 3000
-CMD sh -c 'npx prisma migrate deploy || npx prisma db push --accept-data-loss || true; npm run start:prod'
+CMD sh -c 'npx prisma migrate deploy || npx prisma db push --accept-data-loss || true; npx prisma db seed || true; npm run start:prod'

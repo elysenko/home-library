@@ -13,10 +13,35 @@ enum Role {
 }
 
 model User {
-  id        String   @id @default(uuid())
+  id        Int      @id @default(autoincrement())
   email     String   @unique
   name      String
   password  String
   role      Role     @default(USER)
   createdAt DateTime @default(now())
+  loans     Loan[]
+}
+
+model Book {
+  id            Int      @id @default(autoincrement())
+  title         String
+  author        String
+  genre         String   @default("")
+  isbn          String   @default("")
+  shelfLocation String   @default("")
+  createdAt     DateTime @default(now())
+  loans         Loan[]
+}
+
+model Loan {
+  id           Int       @id @default(autoincrement())
+  bookId       Int
+  book         Book      @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  borrowerName String
+  dueDate      DateTime
+  status       String    @default("lent")
+  returnedAt   DateTime?
+  userId       Int
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt    DateTime  @default(now())
 }

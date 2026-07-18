@@ -1,5 +1,5 @@
 {
   "ready_testid": "app-ready",
-  "expect_text": [],
-  "reject_signatures": ["home-title\">Welcome<", "API: checking…", "API: backend unreachable"]
+  "expect_text": ["lending ledger", "home library"],
+  "reject_signatures": ["home-title\">Welcome<", "home-title\">Users<", "API: checking…", "API: backend unreachable"]
 }

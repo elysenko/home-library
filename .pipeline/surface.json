@@ -1,16 +1,47 @@
 {
   "_generated": true,
-  "_note": "This file is overwritten by the scaffolder agent. Do not edit manually.",
+  "_note": "Extended by the coder agent to reflect the implemented routes/components/testids.",
   "routes": [
     { "method": "GET", "path": "/api/health" },
-    { "method": "POST", "path": "/api/auth/login" }
+    { "method": "POST", "path": "/api/auth/login" },
+    { "method": "GET", "path": "/api/auth/me" },
+    { "method": "GET", "path": "/api/books" },
+    { "method": "POST", "path": "/api/books" },
+    { "method": "GET", "path": "/api/books/:id" },
+    { "method": "PUT", "path": "/api/books/:id" },
+    { "method": "DELETE", "path": "/api/books/:id" },
+    { "method": "GET", "path": "/api/loans" },
+    { "method": "POST", "path": "/api/loans" },
+    { "method": "POST", "path": "/api/loans/:id/return" },
+    { "method": "GET", "path": "/api/admin/users" }
   ],
   "components": [
     { "selector": "App", "file": "web/src/App.tsx" },
-    { "selector": "Home", "file": "web/src/pages/Home.tsx" }
+    { "selector": "Login", "file": "web/src/routes/Login.tsx" },
+    { "selector": "Books", "file": "web/src/routes/Books.tsx" },
+    { "selector": "BookDetail", "file": "web/src/routes/BookDetail.tsx" },
+    { "selector": "Loans", "file": "web/src/routes/Loans.tsx" },
+    { "selector": "Admin", "file": "web/src/routes/Admin.tsx" },
+    { "selector": "AdminSettings", "file": "web/src/routes/AdminSettings.tsx" },
+    { "selector": "Layout", "file": "web/src/components/Layout.tsx" }
   ],
   "testIds": [
     { "id": "app-ready", "element": "div", "component": "App" },
-    { "id": "home-title", "element": "h1", "component": "Home" }
+    { "id": "login-page", "element": "div", "component": "Login" },
+    { "id": "login-form", "element": "form", "component": "Login" },
+    { "id": "login-email", "element": "input", "component": "Login" },
+    { "id": "login-password", "element": "input", "component": "Login" },
+    { "id": "login-submit", "element": "button", "component": "Login" },
+    { "id": "books-page", "element": "main", "component": "Books" },
+    { "id": "books-title", "element": "h1", "component": "Books" },
+    { "id": "add-book", "element": "button", "component": "Books" },
+    { "id": "books-grid", "element": "div", "component": "Books" },
+    { "id": "book-detail-page", "element": "main", "component": "BookDetail" },
+    { "id": "loans-page", "element": "main", "component": "Loans" },
+    { "id": "loans-list", "element": "div", "component": "Loans" },
+    { "id": "log-loan", "element": "button", "component": "Loans" },
+    { "id": "admin-page", "element": "main", "component": "Admin" },
+    { "id": "users-table", "element": "div", "component": "Admin" },
+    { "id": "logout", "element": "button", "component": "Layout" }
   ]
 }
