@@ -1,0 +1,67 @@
+[
+  {
+    "id": "a1-1",
+    "category": "wrong_behavior",
+    "file": "backend/src/routes/loans.ts",
+    "description": "POST /api/loans/:id/return silently overwrites returned_at on every call instead of treating a repeat return as a no-op or returning 409.",
+    "check": {
+      "kind": "grep",
+      "file": "backend/src/routes/loans.ts",
+      "pattern": "loan\\.status === 'returned'",
+      "expect": "present"
+    },
+    "status": "fixed",
+    "raised_attempt": 1,
+    "times_raised": 1,
+    "fixed_by_commit": "9c2c7bd1c0e008335085a912d1969fdd057e4ea5",
+    "patched_attempt": 1
+  },
+  {
+    "id": "a1-2",
+    "category": "edge_case",
+    "file": "backend/src/routes/auth.ts",
+    "description": "Login does not validate email format so a malformed email returns 401 instead of the required 400.",
+    "check": null,
+    "status": "addressed",
+    "raised_attempt": 1,
+    "times_raised": 1,
+    "fixed_by_commit": "9c2c7bd1c0e008335085a912d1969fdd057e4ea5",
+    "patched_attempt": 1
+  },
+  {
+    "id": "a1-3",
+    "category": "edge_case",
+    "file": "backend/src/routes/books.ts",
+    "description": "readBookInput coerces wrong-typed field values into strings instead of rejecting them with 400.",
+    "check": null,
+    "status": "addressed",
+    "raised_attempt": 1,
+    "times_raised": 1,
+    "fixed_by_commit": "9c2c7bd1c0e008335085a912d1969fdd057e4ea5",
+    "patched_attempt": 1
+  },
+  {
+    "id": "a1-4",
+    "category": "test_coverage",
+    "file": ".pipeline/surface.json",
+    "description": "surface.json testIds/components list was not fully extended to match the real implemented UI despite explicit instruction in ARCHITECTURE.md.",
+    "check": null,
+    "status": "addressed",
+    "raised_attempt": 1,
+    "times_raised": 1,
+    "fixed_by_commit": "9c2c7bd1c0e008335085a912d1969fdd057e4ea5",
+    "patched_attempt": 1
+  },
+  {
+    "id": "a1-5",
+    "category": "edge_case",
+    "file": "web/src/routes/BookDetail.tsx",
+    "description": "Book detail loan history is inadvertently scoped to only the viewing user's own loans due to server-side role scoping on the shared loans endpoint.",
+    "check": null,
+    "status": "addressed",
+    "raised_attempt": 1,
+    "times_raised": 1,
+    "fixed_by_commit": "9c2c7bd1c0e008335085a912d1969fdd057e4ea5",
+    "patched_attempt": 1
+  }
+]
