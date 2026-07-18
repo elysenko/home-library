@@ -6,12 +6,12 @@
 // Passwords are fixed & known (not derived) so they match the frontend's
 // demo-account quick-fill (web/src/routes/Login.tsx). Re-asserted on every run.
 import { PrismaClient, Role } from '@prisma/client';
-import { createHash } from 'crypto';
+import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
 
 function hashPassword(password: string): string {
-  return createHash('sha256').update(password).digest('hex');
+  return bcrypt.hashSync(password, 10);
 }
 
 // The two accounts a reviewer signs in with — printed as SEED_CRED lines.

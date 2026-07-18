@@ -16,7 +16,7 @@ image + backend API image.
 - `backend/` — Express API. Entry `src/server.ts`, routes in `src/routes/`,
   Prisma schema `prisma/schema.prisma`, seed `prisma/seed.ts`.
 - `web/` — Vite React SPA. Routes in `src/routes/AppRoutes.tsx`; the API client
-  lives in `src/lib/api.ts` + `src/mock/store.ts`.
+  lives in `src/lib/api.ts` + `src/lib/store.ts`.
 
 ## Environment
 Set on the backend (injected from `infra-secrets` in deploy):

@@ -21,8 +21,12 @@ router.get('/', async (req: AuthRequest, res) => {
   } else if (status === 'returned') {
     where.status = 'returned';
   } else if (status === 'overdue') {
+    // Floor "now" to UTC midnight so overdue is day-granular and agrees with the
+    // client's date-string comparison in web/src/lib/store.ts (isOverdue).
+    const todayUtc = new Date();
+    todayUtc.setUTCHours(0, 0, 0, 0);
     where.status = 'lent';
-    where.dueDate = { lt: new Date() };
+    where.dueDate = { lt: todayUtc };
   }
   const loans = await prisma.loan.findMany({
     where,
